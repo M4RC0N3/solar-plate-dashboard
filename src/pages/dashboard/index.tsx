@@ -1,8 +1,64 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import { Bar } from 'react-chartjs-2';
 import './index.css';
 import Logo from '../../assets/img/logo.svg';
 import Sun from '../../assets/icon/sun.svg';
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
+const labels : string[] = ['jan', 'feb', 'Mar', 'Apr', 'May', 'Yun', 'Yul', 'Aug', 'Sep', 'Oc', 'Nov', 'Dec']
+
+
+
 const DashBoard = () =>{
+  const data : any = {
+    labels,
+    datasets: [{
+      data: [300, 200, 160, 210, 50, 200, 260, 40, 200, 300, 100, 50],
+      borderRadius: 6,
+      borderSkipped: false,
+      backgroundColor: (context:any) => {
+        const ctx = context.chart.ctx;
+        const gradient = ctx.createLinearGradient(0, 0, 0, 200);
+        gradient.addColorStop(0, "#F97F2A");
+        gradient.addColorStop(1, "#FDB31E");
+        return gradient;
+      },
+    }],
+  }
+
+  const [chartOption, setChartOption] = useState({
+    responsive: true,
+    plugins: {
+      legend: {
+        display: false
+      },
+      title: {
+        display: false
+      },
+    },
+    scales: {
+      // to remove the labels
+      x: {
+        grid: {
+          drawBorder: false,
+          display: false,
+        },
+      },
+      y: {
+        title: {
+          display: true,
+          text: 'potency in ( W )'
+        }
+      }
+    },
+  });
 
   return (
     <div className="dashboard-container">
@@ -26,12 +82,15 @@ const DashBoard = () =>{
           </div>
         </div>
         <div className="chart-container">
-            <div className="power-genereted-per-month-container chart">
-              <p className="title">Power genereted per month</p>
+          <div className="power-genereted-per-month-container inner-chart">
+            <p className="title">Power genereted per month</p>
+            <div className="chart">
+              <Bar className="bar" data={data} options={chartOption}></Bar>
             </div>
-            <div className="consumed-energy-container chart">
-              <p className="title">Consumed energy</p>
-            </div>
+          </div>
+          <div className="consumed-energy-container inner-chart">
+            <p className="title">Consumed energy</p>
+          </div>
         </div>
         <div className="graphics-elements-container">
           <div className="solar-plate-view-container view"></div>
