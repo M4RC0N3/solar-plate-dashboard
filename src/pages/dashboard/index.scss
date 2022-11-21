@@ -10,8 +10,12 @@
         color: #373737;
     }
     .sidebar-left-container{
-        background-color: #fff;
         height: 100%;
+        display: flex;
+        justify-content: center;
+        background-color: #fff;
+        box-sizing: border-box;
+        padding: 20px 15px;
     }
     .dashboard{
         display: grid;
@@ -139,6 +143,72 @@
                     font-family: "Poppins-SemiBold", sans-serif;
                     font-size: 2rem;
                     color: #F97F2A;
+                }
+            }
+        }
+        .sun-position-container{
+            min-height: 225px;
+            display: grid;
+            grid-template-rows: 1fr auto;
+            margin-bottom: 10px;
+            .sun-path-container{
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: flex-end;
+                position: relative;
+                margin-bottom: 10px;
+                .sun-path{
+                    width: 72%;
+                    height: 100px;
+                    position: relative;
+                    border-top-left-radius: 500px;
+                    border-top-right-radius: 500px;
+                    border: 2px dashed #F97F2A;
+                    .sun{
+                        position: absolute;
+                    }
+                }
+                .base{
+                    @mixin dot{
+                        content: "";
+                        position: absolute;
+                        width: 13px;
+                        height: 13px;
+                        background-color: #F97F2A;
+                        border-radius: 100px;
+                        top: -6px;
+                    }
+                    position: absolute;
+                    width: 100%;
+                    height: 2px;
+                    background-color: #F97F2A;
+                    &::after{
+                        @include dot;
+                        left: 34px;
+                    }
+                    &::before{
+                        @include dot;
+                        right: 34px;
+                    }
+                }
+            }
+            .subtitle-container{
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-end;
+                div{
+                    p{
+                        text-align: center;
+                        color: #373737;
+                    }
+                    p:first-child{
+                        font-family: 'Poppins-Medium', sans-serif;
+                        margin-bottom: 5px;
+                    }
+                    p:last-child{
+                        font-family: 'Poppins-Light', sans-serif;
+                    }
                 }
             }
         }

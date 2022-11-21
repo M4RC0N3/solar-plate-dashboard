@@ -1,10 +1,14 @@
 import React from 'react';
 import './index.css';
+import Logo from '../../assets/img/logo.svg';
+import Sun from '../../assets/icon/sun.svg';
 const DashBoard = () =>{
 
   return (
     <div className="dashboard-container">
-      <div className="sidebar-left-container"></div>
+      <div className="sidebar-left-container">
+        <img src={Logo} alt="Logo" width={44} height={44} draggable={false}/>
+      </div>
       <div className="dashboard">
         <h1>DASHBOARD</h1>
         <div className="display-container">
@@ -45,7 +49,24 @@ const DashBoard = () =>{
             <p>24 °C</p>
           </div>
         </div>
-        <div className="sun-position-container"></div>
+        <div className="sun-position-container">
+          <div className="sun-path-container">
+            <div className="sun-path">
+              <img className="sun" src={Sun} alt="Sun icon" width={26} height={26} draggable={false}/>
+            </div>
+            <div className="base"></div>
+          </div>
+          <div className="subtitle-container">
+            <div className="sunrise-container">
+              <p>sunrise</p>
+              <p>06:00 am</p>
+            </div>
+            <div className="sunset-container">
+              <p>sunset</p>
+              <p>06:00 pm</p>
+            </div>
+          </div>
+        </div>
         <div className="weather-prediction-container">
           <p className="title">Weather Prediction</p>
           <div className="card">
