@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import React, { useState, useEffect, useRef } from 'react';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, LineElement, PointElement, Filler } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
+import { Line } from 'react-chartjs-2';
 import './index.css';
 import Logo from '../../assets/img/logo.svg';
 import Sun from '../../assets/icon/sun.svg';
@@ -8,33 +9,62 @@ ChartJS.register(
   CategoryScale,
   LinearScale,
   BarElement,
+  LineElement,
+  PointElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  Filler
 );
 const labels : string[] = ['jan', 'feb', 'Mar', 'Apr', 'May', 'Yun', 'Yul', 'Aug', 'Sep', 'Oc', 'Nov', 'Dec']
 
+const Test :Number[] = [300, 200, 160, 210, 50, 200, 260, 40, 200, 300, 100, 50];
+const NumberRandomGenerator = () =>{
+  let operation:any = Math.floor(10* Math.random());
+  return operation;
+}
 
 
-const DashBoard = () =>{
-  const data : any = {
-    labels,
-    datasets: [{
-      data: [300, 200, 160, 210, 50, 200, 260, 40, 200, 300, 100, 50],
-      borderRadius: 6,
-      borderSkipped: false,
-      backgroundColor: (context:any) => {
-        const ctx = context.chart.ctx;
-        const gradient = ctx.createLinearGradient(0, 0, 0, 200);
-        gradient.addColorStop(0, "#F97F2A");
-        gradient.addColorStop(1, "#FDB31E");
-        return gradient;
+export const LineOptions = {
+  plugins: {
+    legend: {
+      display: false
+    },
+    title: {
+      display: false
+    },
+  },
+  scales: {
+    // to remove the labels
+    x: {
+      grid: {
+        drawBorder: false,
+        display: false,
+        text: 'Senconds in ( s )'
       },
-    }],
+    },
+    y: {
+      title: {
+        display: true,
+        text: 'potency in ( W )'
+      }
+    }
+  },
+  elements: {
+    point:{
+      radius: 0
+    }
+  },
+  legend: {
+    display: false
+  },
+  tooltips: {
+    enabled: false
   }
+};
 
-  const [chartOption, setChartOption] = useState({
-    responsive: true,
+export const BarOptions = {
+  responsive: true,
     plugins: {
       legend: {
         display: false
@@ -58,7 +88,44 @@ const DashBoard = () =>{
         }
       }
     },
-  });
+}
+const DashBoard = () =>{
+
+  const [values, setValues] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+
+  const dataBar : any = {
+    labels,
+    datasets: [{
+      data: Test,
+      borderRadius: 6,
+      borderSkipped: false,
+      backgroundColor: (context:any) => {
+        const ctx = context.chart.ctx;
+        const gradient = ctx.createLinearGradient(0, 0, 0, 200);
+        gradient.addColorStop(0, "#F97F2A");
+        gradient.addColorStop(1, "#FDB31E");
+        return gradient;
+      },
+    }],
+  }
+
+  const dataLine = {
+    labels: labels,
+    datasets: [{
+      label: "Dataset 1",
+      data: Test,
+      borderColor: "#F97F2A",
+      backgroundColor: (context:any) => {
+        const ctx = context.chart.ctx;
+        const gradient = ctx.createLinearGradient(0, 0, 0, 200);
+        gradient.addColorStop(0, "#F97F2A");
+        gradient.addColorStop(1, "rgba(253, 179, 30, 0)");
+        return gradient;
+      },
+      tension: .4,
+      fill: true
+    }],
+  };
 
   return (
     <div className="dashboard-container">
@@ -85,11 +152,12 @@ const DashBoard = () =>{
           <div className="power-genereted-per-month-container inner-chart">
             <p className="title">Power genereted per month</p>
             <div className="chart">
-              <Bar className="bar" data={data} options={chartOption}></Bar>
+              <Bar className="bar" data={dataBar} options={BarOptions} ></Bar>
             </div>
           </div>
           <div className="consumed-energy-container inner-chart">
             <p className="title">Consumed energy</p>
+           <Line data={dataLine} options={LineOptions}></Line>
           </div>
         </div>
         <div className="graphics-elements-container">
