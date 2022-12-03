@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, LineElement, PointElement, Filler } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import { Line } from 'react-chartjs-2';
@@ -14,13 +14,13 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
-  Filler
+  Filler,
 );
 const labels : string[] = ['jan', 'feb', 'Mar', 'Apr', 'May', 'Yun', 'Yul', 'Aug', 'Sep', 'Oc', 'Nov', 'Dec']
 
 const Test :Number[] = [300, 200, 160, 210, 50, 200];
 const NumberRandomGenerator = () =>{
-  let operation:any = Math.floor(100* Math.random());
+  let operation:any = Math.floor(260* Math.random());
   return operation;
 }
 
@@ -31,29 +31,35 @@ export const LineOptions = {
     },
     title: {
       display: false
-    },
+    },  
   },
+
   scales: {
-    // to remove the labels
     x: {
+      offset: false,
       grid: {
         drawBorder: false,
         display: false,
+      },
+      title:{
+        display: true,
         text: 'Senconds in ( s )'
       },
     },
     y: {
+      max: 300,
+      min: 0,
       title: {
         display: true,
         text: 'potency in ( W )'
       }
     }
   },
-  elements: {
-    point:{
-      radius: 0
-    }
-  },
+    elements: {
+      point:{
+        radius: 0
+      }
+    },
   legend: {
     display: false
   },
@@ -105,26 +111,29 @@ const DashBoard = () =>{
       },
     }],
   }
-
   const dataLine = {
-    labels: labels,
+    labels: ["1", "2", "3","4" ,"5", "6", "7", "8", "9", "10"],
     datasets: [{
       label: "Dataset 1",
-      data: [2, 3, 1, 6, 5],
+      data: [0, 2, 3, 5, 6, 7, 8, 9, 10],
       borderColor: "#F97F2A",
       backgroundColor: (context:any) => {
         const ctx = context.chart.ctx;
         const gradient = ctx.createLinearGradient(0, 0, 0, 200);
         gradient.addColorStop(0, "#F97F2A");
-        gradient.addColorStop(1, "rgba(253, 179, 30, 0)");
+        gradient.addColorStop(1, "rgba(253, 179, 30, .1)");
         return gradient;
       },
       tension: .4,
-      fill: true
+      fill: true,
+      spanGaps: false,
+      animation:{
+        duration: 0,
+      },
     }],
   };
   useEffect(()=>{
-    let values: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+    let values: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     let currentValue:any = chartValue.current;
     setInterval(()=>{
       values.splice(0, 1);
@@ -132,7 +141,7 @@ const DashBoard = () =>{
       currentValue.data.datasets[0].data=values;
       console.log(values);
       currentValue.update();
-    }, 400);
+    }, 900);
   }, [])
   return (
     <div className="dashboard-container">
