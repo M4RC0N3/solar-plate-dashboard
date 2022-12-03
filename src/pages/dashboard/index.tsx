@@ -18,12 +18,11 @@ ChartJS.register(
 );
 const labels : string[] = ['jan', 'feb', 'Mar', 'Apr', 'May', 'Yun', 'Yul', 'Aug', 'Sep', 'Oc', 'Nov', 'Dec']
 
-const Test :Number[] = [300, 200, 160, 210, 50, 200, 260, 40, 200, 300, 100, 50];
+const Test :Number[] = [300, 200, 160, 210, 50, 200];
 const NumberRandomGenerator = () =>{
-  let operation:any = Math.floor(10* Math.random());
+  let operation:any = Math.floor(100* Math.random());
   return operation;
 }
-
 
 export const LineOptions = {
   plugins: {
@@ -90,9 +89,7 @@ export const BarOptions = {
     },
 }
 const DashBoard = () =>{
-
-  const [values, setValues] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
-
+  const chartValue = useRef();
   const dataBar : any = {
     labels,
     datasets: [{
@@ -113,7 +110,7 @@ const DashBoard = () =>{
     labels: labels,
     datasets: [{
       label: "Dataset 1",
-      data: Test,
+      data: [2, 3, 1, 6, 5],
       borderColor: "#F97F2A",
       backgroundColor: (context:any) => {
         const ctx = context.chart.ctx;
@@ -126,7 +123,17 @@ const DashBoard = () =>{
       fill: true
     }],
   };
-
+  useEffect(()=>{
+    let values: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+    let currentValue:any = chartValue.current;
+    setInterval(()=>{
+      values.splice(0, 1);
+      values.push(NumberRandomGenerator());
+      currentValue.data.datasets[0].data=values;
+      console.log(values);
+      currentValue.update();
+    }, 400);
+  }, [])
   return (
     <div className="dashboard-container">
       <div className="sidebar-left-container">
@@ -157,7 +164,7 @@ const DashBoard = () =>{
           </div>
           <div className="consumed-energy-container inner-chart">
             <p className="title">Consumed energy</p>
-           <Line data={dataLine} options={LineOptions}></Line>
+           <Line data={dataLine} options={LineOptions} ref={chartValue}></Line>
           </div>
         </div>
         <div className="graphics-elements-container">
