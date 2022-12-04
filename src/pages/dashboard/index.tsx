@@ -5,6 +5,7 @@ import { Line } from 'react-chartjs-2';
 import './index.css';
 import Logo from '../../assets/img/logo.svg';
 import Sun from '../../assets/icon/sun.svg';
+import EquipmentsConecteds from '../../assets/img/equipments-conecteds.svg';
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -139,7 +140,6 @@ const DashBoard = () =>{
       values.splice(0, 1);
       values.push(NumberRandomGenerator());
       currentValue.data.datasets[0].data=values;
-      console.log(values);
       currentValue.update();
     }, 900);
   }, [])
@@ -156,7 +156,7 @@ const DashBoard = () =>{
               <p className="power">200 W</p>
           </div>
           <div className="current-power-container display">
-              <p className="title">Maximum power generated</p>
+              <p className="title">Current power</p>
               <p className="power">20 W</p>
           </div>
           <div className="total-power-generated-container display">
@@ -178,7 +178,9 @@ const DashBoard = () =>{
         </div>
         <div className="graphics-elements-container">
           <div className="solar-plate-view-container view"></div>
-          <div className="equipments-conected-container view"></div>
+          <div className="equipments-conected-container view">
+            <img src={EquipmentsConecteds} alt="Equipments Conecteds" width={710} height={300} draggable={false}/>
+          </div>
         </div>
       </div>
       <div className="sidebar-right-container">
