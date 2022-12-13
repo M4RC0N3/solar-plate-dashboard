@@ -1,6 +1,37 @@
+import { useState, useEffect } from 'react';
 import Sun from '../../assets/icon/sun.svg';
 import './index.css';
+import {WEATHER_API_KEY, WEATHER_API_URL} from '../../services/api';
 export const WeatherPredicitonBar = ()=>{
+    const [latitude, setLatitude] = useState(Number);
+    const [longitude, setLongitude] = useState(Number);
+    if('geolocation' in navigator){
+        navigator.geolocation.getCurrentPosition(position=>{
+            let latitude:number = position.coords.latitude;
+            let longitude: number = position.coords.longitude
+            setLatitude(latitude);
+            setLongitude(longitude);
+        },err=>{
+            console.log(err);
+            alert('Não foi possível pegar a localização')
+        });
+    }
+    else{
+        alert('n foi possível')
+    }
+    useEffect(()=>{
+        console.log(longitude, latitude);
+        const currentWeather =  fetch(`${WEATHER_API_URL}/weather?lat=${latitude}&lon=${longitude}&appid=${WEATHER_API_KEY}`);
+        const forecastFetch =  fetch(`${WEATHER_API_URL}/forecast?lat=${latitude}&lon=${longitude}&appid=${WEATHER_API_KEY}`);
+        Promise.all([currentWeather, forecastFetch])
+        .then(async(response)=>{
+            const weatherResponse = await response[0].json();
+            const forecastResponse = await response[1].json();
+            console.log(weatherResponse);
+            console.log('=================');
+            console.log(forecastResponse);
+        })
+    })
     return(
         <div className="sidebar-right-container">
             <div></div>
