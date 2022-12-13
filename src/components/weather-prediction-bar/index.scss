@@ -1,0 +1,159 @@
+.sidebar-right-container{
+    width: 330px;
+    height: 100%;
+    background-color: #fff;
+    display: grid;
+    grid-template-rows: 135px auto auto auto;
+    box-sizing: border-box;
+    padding: 60px 20px;
+    .weather-container{
+        width: 100%;
+        max-height: 80px;
+        display: flex;
+        justify-content: space-between;
+        padding-bottom: 18px;
+        border-bottom: 1px solid rgba(112, 112, 112, .16);
+        .weather-local-container{
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            .weather{
+                font-family: "Poppins-SemiBold", sans-serif;
+                color: #707070;
+                font-size: 1.5rem;
+            }
+            .local{
+                font-family: "Poppins-Regular", sans-serif;
+                color: #707070;
+            }
+        }
+        .temperature-container{
+            display: flex;
+            align-items: center;
+            p{
+                font-family: "Poppins-SemiBold", sans-serif;
+                font-size: 2rem;
+                color: #F97F2A;
+            }
+        }
+    }
+    .sun-position-container{
+        min-height: 225px;
+        display: grid;
+        grid-template-rows: 1fr auto;
+        margin-bottom: 10px;
+        .sun-path-container{
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            position: relative;
+            margin-bottom: 10px;
+            .sun-path{
+                width: 72%;
+                height: 100px;
+                position: relative;
+                border-top-left-radius: 500px;
+                border-top-right-radius: 500px;
+                border: 2px dashed #F97F2A;
+                .sun{
+                    position: absolute;
+                }
+            }
+            .base{
+                @mixin dot{
+                    content: "";
+                    position: absolute;
+                    width: 13px;
+                    height: 13px;
+                    background-color: #F97F2A;
+                    border-radius: 100px;
+                    top: -6px;
+                }
+                position: absolute;
+                width: 100%;
+                height: 2px;
+                background-color: #F97F2A;
+                &::after{
+                    @include dot;
+                    left: 34px;
+                }
+                &::before{
+                    @include dot;
+                    right: 34px;
+                }
+            }
+        }
+        .subtitle-container{
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            div{
+                p{
+                    text-align: center;
+                    color: #373737;
+                }
+                p:first-child{
+                    font-family: 'Poppins-Medium', sans-serif;
+                    margin-bottom: 5px;
+                }
+                p:last-child{
+                    font-family: 'Poppins-Light', sans-serif;
+                }
+            }
+        }
+    }
+    .weather-prediction-container{
+        overflow: visible;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        .title{
+            text-align: center;
+            font-family: "Poppins-SemiBold", sans-serif;
+            font-size: 1.5rem;
+        }
+        .card{
+            width: 100%;
+            height: 105px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #fff;
+            box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.09);
+            border-radius: 23px;
+            margin: 20px 0;
+            box-sizing: border-box;
+            padding: 20px;
+            .icon-container{
+                width: 40px;
+                height: 40px;
+                background-color: red;
+            }
+            .weather-date{
+                height: 95%;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                p:first-child{
+                    font-family: "Poppins-Regular", sans-serif;
+                    color: #707070;
+                    font-size: .9rem;
+                }
+                p:last-child{
+                    font-family: "Poppins-SemiBold", sans-serif;
+                    color: #707070;
+                    font-size: 1.1rem;
+                }
+            }
+            .average-temperature-container{
+                height: 100%;
+                display: flex;
+                align-items: flex-end;
+                font-family: "Poppins-Regular", sans-serif;
+                color: #F97F2A;
+                font-size: 1rem;
+            }
+        }
+    }
+}
