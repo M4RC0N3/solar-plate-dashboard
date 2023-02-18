@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 import Sun from '../../assets/icon/sun.svg';
 import './index.css';
 import {WEATHER_API_KEY, WEATHER_API_URL} from '../../services/api';
 export const WeatherPredicitonBar = ()=>{
     const [latitude, setLatitude] = useState(Number);
     const [longitude, setLongitude] = useState(Number);
+    const [weather, setWeather] = useState(null);
+    const [forecast, setForecast] = useState(null);
     if('geolocation' in navigator){
         navigator.geolocation.getCurrentPosition(position=>{
             let latitude:number = position.coords.latitude;
@@ -17,9 +20,9 @@ export const WeatherPredicitonBar = ()=>{
         });
     }
     else{
-        alert('n foi possível')
+        alert('n foi possível');
     }
-    useEffect(()=>{
+    /* useEffect(()=>{
         console.log(longitude, latitude);
         const currentWeather =  fetch(`${WEATHER_API_URL}/weather?lat=${latitude}&lon=${longitude}&appid=${WEATHER_API_KEY}`);
         const forecastFetch =  fetch(`${WEATHER_API_URL}/forecast?lat=${latitude}&lon=${longitude}&appid=${WEATHER_API_KEY}`);
@@ -27,13 +30,43 @@ export const WeatherPredicitonBar = ()=>{
         .then(async(response)=>{
             const weatherResponse = await response[0].json();
             const forecastResponse = await response[1].json();
+            setWeather(weatherResponse);
+            setForecast(forecastResponse);
             console.log(weatherResponse);
-            console.log('=================');
             console.log(forecastResponse);
         })
+    }) */
+    const Exe = ()=>{
+        
+    }
+
+
+    
+    useEffect(()=>{
+        const interval =  setInterval(()=>{
+            console.log(longitude, latitude);
+            const currentWeather =  axios.get(`${WEATHER_API_URL}/weather?lat=${latitude}&lon=${longitude}&appid=${WEATHER_API_KEY}`);
+            const forecastFetch =  axios.get(`${WEATHER_API_URL}/forecast?lat=${latitude}&lon=${longitude}&appid=${WEATHER_API_KEY}`);
+            Promise.all([currentWeather, forecastFetch])
+            .then(async(response)=>{
+                const  weatherResponse = await response[0].data;
+                const forecastResponse = await response[1].data;
+                setWeather(weatherResponse);
+                setForecast(forecastResponse);
+            })
+        }, 5000)
+        return () => {
+            clearInterval(interval);
+        };
     })
+    useEffect(()=>{
+        console.log(weather);
+        console.log(forecast);
+        
+    }, [weather, forecast])
     return(
         <div className="sidebar-right-container">
+            <button onClick={Exe}>test</button>
             <div></div>
             <div className="weather-container">
             <div className="weather-local-container">
