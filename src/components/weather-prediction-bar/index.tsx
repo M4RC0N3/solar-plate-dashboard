@@ -3,11 +3,15 @@ import axios from 'axios';
 import Sun from '../../assets/icon/sun.svg';
 import './index.css';
 import {WEATHER_API_KEY, WEATHER_API_URL} from '../../services/api';
+
 export const WeatherPredicitonBar = ()=>{
     const [latitude, setLatitude] = useState(Number);
     const [longitude, setLongitude] = useState(Number);
-    const [weather, setWeather] = useState(null);
-    const [forecast, setForecast] = useState(null);
+    const [weather, setWeather] = useState(Object);
+    const [forecast, setForecast] = useState(Object);
+    const [lastOccurrenceWeather , setLastOccurrenceWeather] = useState(Object);
+    const [celsiusTemperature, setCelsiusTemperature] =useState(String);
+
     if('geolocation' in navigator){
         navigator.geolocation.getCurrentPosition(position=>{
             let latitude:number = position.coords.latitude;
@@ -16,65 +20,71 @@ export const WeatherPredicitonBar = ()=>{
             setLongitude(longitude);
         },err=>{
             console.log(err);
-            alert('Não foi possível pegar a localização')
+            alert('Unable to get location')
         });
     }
-    else{
-        alert('n foi possível');
-    }
-    /* useEffect(()=>{
-        console.log(longitude, latitude);
-        const currentWeather =  fetch(`${WEATHER_API_URL}/weather?lat=${latitude}&lon=${longitude}&appid=${WEATHER_API_KEY}`);
-        const forecastFetch =  fetch(`${WEATHER_API_URL}/forecast?lat=${latitude}&lon=${longitude}&appid=${WEATHER_API_KEY}`);
+    const getWeather = async(): Promise<any> => {
+        const currentWeather =  axios.get(`${WEATHER_API_URL}/weather?lat=${latitude}&lon=${longitude}&appid=${WEATHER_API_KEY}`);
+        const forecastFetch =  axios.get(`${WEATHER_API_URL}/forecast?lat=${latitude}&lon=${longitude}&appid=${WEATHER_API_KEY}`);
         Promise.all([currentWeather, forecastFetch])
         .then(async(response)=>{
-            const weatherResponse = await response[0].json();
-            const forecastResponse = await response[1].json();
+            const weatherResponse = await response[0].data;
+            const forecastResponse = await response[1].data;
             setWeather(weatherResponse);
             setForecast(forecastResponse);
-            console.log(weatherResponse);
-            console.log(forecastResponse);
         })
-    }) */
-    const Exe = ()=>{
-        
     }
 
+    const getLastOcurrenceWeather = ():void =>{
+        let ocurrenceList: Array<number> = weather.weather;
+        let getlastOcurrence: number = ocurrenceList?.[ ocurrenceList?.length - 1 ];
 
-    
+        setLastOccurrenceWeather(getlastOcurrence);
+    }
+
+    const convertTemperature = async() =>{
+        let kelvinTemperature = await weather.main?.temp;
+        let celsius =  kelvinTemperature - 273;
+        let test = celsius.toFixed(0)
+        setCelsiusTemperature(test);
+    }
+
+    const handleLoad = async()=>{
+        await getWeather();
+    }
+
     useEffect(()=>{
-        const interval =  setInterval(()=>{
-            console.log(longitude, latitude);
-            const currentWeather =  axios.get(`${WEATHER_API_URL}/weather?lat=${latitude}&lon=${longitude}&appid=${WEATHER_API_KEY}`);
-            const forecastFetch =  axios.get(`${WEATHER_API_URL}/forecast?lat=${latitude}&lon=${longitude}&appid=${WEATHER_API_KEY}`);
-            Promise.all([currentWeather, forecastFetch])
-            .then(async(response)=>{
-                const  weatherResponse = await response[0].data;
-                const forecastResponse = await response[1].data;
-                setWeather(weatherResponse);
-                setForecast(forecastResponse);
-            })
-        }, 5000)
+        const interval =  setInterval(async()=>{
+            await getWeather();
+        }, 1800000)
+        
         return () => {
             clearInterval(interval);
         };
-    })
+    });
+    
+    useEffect(()=>{
+        window.addEventListener('load', handleLoad);
+        return () => {
+            window.removeEventListener('load', handleLoad);
+        };
+    });
     useEffect(()=>{
         console.log(weather);
         console.log(forecast);
-        
+        convertTemperature();
+        getLastOcurrenceWeather();
     }, [weather, forecast])
     return(
         <div className="sidebar-right-container">
-            <button onClick={Exe}>test</button>
             <div></div>
             <div className="weather-container">
             <div className="weather-local-container">
-                <p className="weather">Sun</p>
-                <p className="local">Salvador, BA</p>
+                <p className="weather"> { lastOccurrenceWeather ? lastOccurrenceWeather.main: 'Loading...' } </p>
+                <p className="local">{ weather.name },  { weather.sys?.country }</p>
             </div>
             <div className="temperature-container">
-                <p>24 °C</p>
+                <p>{ celsiusTemperature } °C</p>
             </div>
             </div>
             <div className="sun-position-container">
